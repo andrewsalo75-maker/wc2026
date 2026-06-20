@@ -154,13 +154,42 @@ input[type=text]:focus{border-color:var(--gold);}
 .pts-cell{font-family:var(--hf);font-size:28px;color:var(--gold);text-align:right;}
 
 /* COMPARE */
-.cmp-wrap{padding:24px;}
-.cmp-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px;}
-.cmp-card{background:var(--dark);border:1px solid var(--line);border-radius:var(--r);padding:18px;}
-.cmp-card h3{font-size:14px;font-weight:700;margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid var(--line);}
-.cmp-row{display:flex;align-items:center;gap:7px;padding:5px 0;font-size:12px;border-bottom:1px solid rgba(30,70,30,.4);}
-.cmp-row:last-child{border-bottom:none;}
-.cmp-mn{color:var(--muted);font-size:10px;width:44px;flex-shrink:0;}
+.cmp-wrap{padding:0;}
+.cmp-player-tabs{display:flex;overflow-x:auto;background:var(--dark);border-bottom:1px solid var(--line);padding:0 16px;}
+.cmp-pt{padding:10px 16px;font-size:12px;font-weight:600;color:var(--muted);cursor:pointer;border-bottom:2px solid transparent;background:none;border-top:none;border-left:none;border-right:none;white-space:nowrap;transition:color .15s;}
+.cmp-pt.on{color:var(--gold);border-bottom-color:var(--gold);}
+.cmp-pt:hover:not(.on){color:var(--white);}
+.cmp-pane{display:none;}
+.cmp-pane.on{display:block;}
+.cmp-score-strip{display:flex;align-items:center;justify-content:space-between;padding:12px 18px 8px;border-bottom:1px solid var(--line);}
+.cmp-sname{font-size:14px;font-weight:700;color:var(--white);}
+.cmp-syou{font-size:10px;color:var(--gold);margin-left:6px;}
+.cmp-spts{font-size:22px;font-weight:700;color:var(--gold);font-family:var(--hf);letter-spacing:1px;}
+.cmp-bk-outer{overflow-x:auto;padding:14px 12px 8px;}
+.cmp-bk-wrap{display:grid;grid-template-columns:1fr 110px 1fr;gap:0;min-width:700px;}
+.cmp-side{display:flex;flex-direction:row;gap:4px;}
+.cmp-side.right{flex-direction:row-reverse;}
+.cmp-col{display:flex;flex-direction:column;justify-content:space-around;gap:3px;min-width:108px;}
+.cmp-col-lbl{font-size:8px;font-weight:700;letter-spacing:1.5px;color:var(--muted);text-align:center;margin-bottom:5px;text-transform:uppercase;}
+.cmp-mc{background:var(--dark);border:1px solid var(--line);border-radius:4px;overflow:hidden;margin-bottom:2px;}
+.cmp-mid{font-size:7px;font-weight:700;letter-spacing:1.5px;color:#3a6040;padding:3px 6px 1px;text-transform:uppercase;}
+.cmp-tr{display:flex;align-items:center;padding:5px 6px;gap:4px;border-left:2px solid transparent;}
+.cmp-tr.sel{background:rgba(201,162,39,.12);border-left-color:var(--gold);}
+.cmp-tr.win{background:rgba(76,175,80,.12);border-left-color:var(--green);}
+.cmp-tr.los{background:rgba(192,57,43,.09);border-left-color:var(--red);}
+.cmp-tf{font-size:12px;flex-shrink:0;}
+.cmp-tn{font-size:9px;font-weight:600;color:var(--white);flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.cmp-tn.tbd{color:#3a6040;font-style:italic;font-weight:400;}
+.cmp-ti{font-size:9px;flex-shrink:0;}
+.cmp-ti.w{color:var(--green);}
+.cmp-ti.l{color:var(--red);}
+.cmp-mdiv{height:1px;background:var(--line);margin:0 6px;}
+.cmp-fin-col{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:0 5px;}
+.cmp-fin-lbl{font-size:8px;font-weight:700;letter-spacing:1.5px;color:var(--gold);text-align:center;margin-bottom:4px;text-transform:uppercase;}
+.cmp-fin-trophy{font-size:20px;text-align:center;margin-bottom:3px;}
+.cmp-legend{display:flex;gap:14px;padding:8px 14px 14px;border-top:1px solid var(--line);}
+.cmp-leg{display:flex;align-items:center;gap:5px;font-size:10px;color:var(--muted);}
+.cmp-leg-bar{width:3px;height:12px;border-radius:0;flex-shrink:0;}
 
 /* SETUP / RESULTS */
 .setup-wrap{padding:24px;}
@@ -255,7 +284,7 @@ input:focus{border-color:var(--gold);}
   </div>
 
   <div class="tab-content" id="tab-compare">
-    <div class="cmp-wrap" id="cmp-content"></div>
+    <div id="cmp-content"></div>
   </div>
 
   <div class="tab-content" id="tab-results">
@@ -766,21 +795,103 @@ function renderLeaderboard(){
 function renderCompare(){
   const s=gs(); const picks=s.picks||{}; const results=s.results||{};
   const container=document.getElementById('cmp-content');
-  if(!isLocked()&&!Object.keys(results).length){ container.innerHTML='<div style="color:var(--muted);font-size:14px;padding:20px 0">Picks hidden until the tournament starts.</div>'; return; }
+  if(!isLocked()&&!Object.keys(results).length){
+    container.innerHTML='<div style="color:var(--muted);font-size:14px;padding:24px">Picks are hidden until the tournament starts.</div>'; return;
+  }
   const players=Object.keys(picks);
-  if(!players.length){ container.innerHTML='<div style="color:var(--muted);font-size:14px;padding:20px 0">No picks yet.</div>'; return; }
-  const teams=getTeams();
-  container.innerHTML=`<div style="margin-bottom:16px;font-size:13px;color:var(--muted)">${players.length} player${players.length!==1?'s':''}</div>
-  <div class="cmp-grid">${players.map(name=>{
-    const pp=picks[name]; const {score}=calcScore(pp,results);
-    const rows=ALL_MATCHES.map(mid=>{
-      const pick=pp[mid]; if(!pick) return '';
-      const team=teams.find(t=>t.id===pick);
-      const result=results[mid];
-      return `<div class="cmp-row"><span class="cmp-mn">${mid}</span><span>${team?team.flag:''} ${team?team.name:pick}</span>${result?(pick===result?'<span style="color:var(--green);margin-left:auto">✓</span>':'<span style="color:var(--red);margin-left:auto">✗</span>'):''}</div>`;
-    }).filter(Boolean).join('');
-    return `<div class="cmp-card"><h3>${name}<span style="color:var(--gold);float:right">${score}pts</span></h3>${rows||'<div style="color:var(--muted);font-size:12px">No picks</div>'}</div>`;
-  }).join('')}</div>`;
+  if(!players.length){ container.innerHTML='<div style="color:var(--muted);font-size:14px;padding:24px">No picks yet.</div>'; return; }
+
+  // Player tabs
+  const tabsHtml=players.map((name,i)=>{
+    const isYou=name===currentPlayer;
+    return `<button class="cmp-pt${i===0?' on':''}" onclick="cmpSwitch('${name.replace(/'/g,"\\'")}',this)">${name}${isYou?' (you)':''}</button>`;
+  }).join('');
+
+  // Build a bracket pane for each player
+  const panesHtml=players.map((name,i)=>{
+    const pp=picks[name];
+    const {score}=calcScore(pp,results);
+    const isYou=name===currentPlayer;
+    return `<div class="cmp-pane${i===0?' on':''}" id="cmpp-${CSS.escape(name)}">
+      <div class="cmp-score-strip">
+        <div><span class="cmp-sname">${name}</span>${isYou?'<span class="cmp-syou">(you)</span>':''}</div>
+        <span class="cmp-spts">${score} pts</span>
+      </div>
+      <div class="cmp-bk-outer">
+        <div class="cmp-bk-wrap">
+          <div class="cmp-side">${cmpSide(pp,results,'left')}</div>
+          <div class="cmp-fin-col">
+            <div class="cmp-fin-trophy">🏆</div>
+            <div class="cmp-fin-lbl">Final · 16pt</div>
+            ${cmpCard('M104',pp,results,true)}
+          </div>
+          <div class="cmp-side right">${cmpSide(pp,results,'right')}</div>
+        </div>
+      </div>
+      <div class="cmp-legend">
+        <div class="cmp-leg"><div class="cmp-leg-bar" style="background:var(--green)"></div>Correct</div>
+        <div class="cmp-leg"><div class="cmp-leg-bar" style="background:var(--red)"></div>Wrong</div>
+        <div class="cmp-leg"><div class="cmp-leg-bar" style="background:var(--gold)"></div>Pending result</div>
+      </div>
+    </div>`;
+  }).join('');
+
+  container.innerHTML=`<div class="cmp-player-tabs">${tabsHtml}</div>${panesHtml}`;
+}
+
+function cmpSide(pp, results, side){
+  const cols = side==='left'
+    ? [ {ids:MATCH_IDS.r32L, lbl:'R32 · 1pt'},
+        {ids:MATCH_IDS.r16L, lbl:'R16 · 2pt'},
+        {ids:MATCH_IDS.qfL,  lbl:'QF · 4pt'},
+        {ids:MATCH_IDS.sfL,  lbl:'SF · 8pt'} ]
+    : [ {ids:MATCH_IDS.r32R, lbl:'R32 · 1pt'},
+        {ids:MATCH_IDS.r16R, lbl:'R16 · 2pt'},
+        {ids:MATCH_IDS.qfR,  lbl:'QF · 4pt'},
+        {ids:MATCH_IDS.sfR,  lbl:'SF · 8pt'} ];
+  return cols.map(col=>`
+    <div class="cmp-col">
+      <div class="cmp-col-lbl">${col.lbl}</div>
+      ${col.ids.map(mid=>cmpCard(mid,pp,results,false)).join('')}
+    </div>`).join('');
+}
+
+function cmpCard(mid, pp, results, isFinal){
+  const [tA,tB]=getMatchTeams(mid,pp);
+  const pick=pp[mid];
+  const result=results[mid];
+
+  function rowHtml(team){
+    if(!team) return `<div class="cmp-tr"><span class="cmp-tn tbd">TBD</span></div>`;
+    let cls='cmp-tr';
+    if(pick===team.id){
+      if(result) cls+= result===team.id?' win':' los';
+      else cls+=' sel';
+    }
+    const indicator = (pick===team.id && result)
+      ? (result===team.id?'<span class="cmp-ti w">✓</span>':'<span class="cmp-ti l">✗</span>')
+      : '';
+    return `<div class="${cls}">
+      <span class="cmp-tf">${team.flag}</span>
+      <span class="cmp-tn">${team.name}</span>
+      ${indicator}
+    </div>`;
+  }
+
+  return `<div class="cmp-mc${isFinal?' final-card':''}">
+    <div class="cmp-mid">${mid}</div>
+    ${rowHtml(tA)}
+    <div class="cmp-mdiv"></div>
+    ${rowHtml(tB)}
+  </div>`;
+}
+
+function cmpSwitch(name, btn){
+  document.querySelectorAll('.cmp-pt').forEach(b=>b.classList.remove('on'));
+  document.querySelectorAll('.cmp-pane').forEach(p=>p.classList.remove('on'));
+  btn.classList.add('on');
+  const el=document.getElementById('cmpp-'+CSS.escape(name));
+  if(el) el.classList.add('on');
 }
 
 // ═══════════════════════════════════════════════════
