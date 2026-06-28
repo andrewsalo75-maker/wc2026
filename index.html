@@ -438,60 +438,97 @@ const ROUND_INFO = [
   {ids:['M104'], label:'Final', pts:16},
 ];
 
-// Default R32 matchups: [matchId, teamA_id, teamB_id]
-const DEFAULT_MATCHUPS = {
-  'M74': ['1E','3ABCDF'],
-  'M77': ['1I','3CDFGH'],
-  'M73': ['2A','2B'],
-  'M75': ['1F','2C'],
-  'M83': ['2K','2L'],
-  'M84': ['1H','2J'],
-  'M81': ['USA','3BEFIJ'],
-  'M82': ['1G','3AEHIJ'],
-  'M76': ['1C','2F'],
-  'M78': ['2E','2I'],
-  'M79': ['MEX','3CEFHI'],
-  'M80': ['1L','3EHIJK'],
-  'M86': ['1J','2H'],
-  'M88': ['2D','2G'],
-  'M85': ['1B','3EFGIJ'],
-  'M87': ['1K','3DEIJL'],
-};
+// ═══════════════════════════════════════════════════
+// ALL 32 QUALIFIED TEAMS (from FIFA bracket 28 Jun 2026)
+// TBD slots: M83 teamA (2K), M84 teamB (2J), M82 teamB (3AEHIJ),
+//            M80 teamB (3EHIJK), M85 teamB (3EFGIJ), M87 teamA (1K)
+// These are the 6 remaining best-3rd-place slots not yet decided
+// ═══════════════════════════════════════════════════
 
 const DEFAULT_TEAMS = [
-  {id:'ARG',flag:'🇦🇷',name:'Argentina'},
-  {id:'AUS',flag:'🇦🇺',name:'Australia'},
-  {id:'BEL',flag:'🇧🇪',name:'Belgium'},
-  {id:'BRA',flag:'🇧🇷',name:'Brazil'},
-  {id:'CAN',flag:'🇨🇦',name:'Canada'},
-  {id:'CMR',flag:'🇨🇲',name:'Cameroon'},
-  {id:'CRO',flag:'🇭🇷',name:'Croatia'},
-  {id:'DEN',flag:'🇩🇰',name:'Denmark'},
-  {id:'ECU',flag:'🇪🇨',name:'Ecuador'},
-  {id:'ENG',flag:'🏴󠁧󠁢󠁥󠁮󠁧󠁿',name:'England'},
-  {id:'ESP',flag:'🇪🇸',name:'Spain'},
-  {id:'FRA',flag:'🇫🇷',name:'France'},
-  {id:'GER',flag:'🇩🇪',name:'Germany'},
-  {id:'GHA',flag:'🇬🇭',name:'Ghana'},
-  {id:'IRN',flag:'🇮🇷',name:'Iran'},
-  {id:'JPN',flag:'🇯🇵',name:'Japan'},
-  {id:'KOR',flag:'🇰🇷',name:'South Korea'},
-  {id:'MAR',flag:'🇲🇦',name:'Morocco'},
-  {id:'MEX',flag:'🇲🇽',name:'Mexico'},
-  {id:'NED',flag:'🇳🇱',name:'Netherlands'},
-  {id:'NGA',flag:'🇳🇬',name:'Nigeria'},
-  {id:'POR',flag:'🇵🇹',name:'Portugal'},
-  {id:'POL',flag:'🇵🇱',name:'Poland'},
-  {id:'SEN',flag:'🇸🇳',name:'Senegal'},
-  {id:'SRB',flag:'🇷🇸',name:'Serbia'},
-  {id:'SUI',flag:'🇨🇭',name:'Switzerland'},
-  {id:'TUN',flag:'🇹🇳',name:'Tunisia'},
-  {id:'URU',flag:'🇺🇾',name:'Uruguay'},
-  {id:'USA',flag:'🇺🇸',name:'USA'},
-  {id:'WAL',flag:'🏴󠁧󠁢󠁷󠁬󠁳󠁿',name:'Wales'},
-  {id:'COL',flag:'🇨🇴',name:'Colombia'},
-  {id:'PAN',flag:'🇵🇦',name:'Panama'},
+  // Confirmed qualifiers
+  {id:'GER', flag:'🇩🇪', name:'Germany'},
+  {id:'PAR', flag:'🇵🇾', name:'Paraguay'},
+  {id:'FRA', flag:'🇫🇷', name:'France'},
+  {id:'SWE', flag:'🇸🇪', name:'Sweden'},
+  {id:'RSA', flag:'🇿🇦', name:'South Africa'},
+  {id:'CAN', flag:'🇨🇦', name:'Canada'},
+  {id:'NED', flag:'🇳🇱', name:'Netherlands'},
+  {id:'MAR', flag:'🇲🇦', name:'Morocco'},
+  {id:'CRO', flag:'🇭🇷', name:'Croatia'},
+  {id:'ESP', flag:'🇪🇸', name:'Spain'},
+  {id:'USA', flag:'🇺🇸', name:'USA'},
+  {id:'BIH', flag:'🇧🇦', name:'Bosnia & Herz.'},
+  {id:'BEL', flag:'🇧🇪', name:'Belgium'},
+  {id:'BRA', flag:'🇧🇷', name:'Brazil'},
+  {id:'JPN', flag:'🇯🇵', name:'Japan'},
+  {id:'CIV', flag:'🇨🇮', name:'Côte d\'Ivoire'},
+  {id:'NOR', flag:'🇳🇴', name:'Norway'},
+  {id:'MEX', flag:'🇲🇽', name:'Mexico'},
+  {id:'ECU', flag:'🇪🇨', name:'Ecuador'},
+  {id:'ENG', flag:'🏴󠁧󠁢󠁥󠁮󠁧󠁿', name:'England'},
+  {id:'ARG', flag:'🇦🇷', name:'Argentina'},
+  {id:'CPV', flag:'🇨🇻', name:'Cape Verde'},
+  {id:'AUS', flag:'🇦🇺', name:'Australia'},
+  {id:'EGY', flag:'🇪🇬', name:'Egypt'},
+  {id:'SUI', flag:'🇨🇭', name:'Switzerland'},
+  {id:'GHA', flag:'🇬🇭', name:'Ghana'},
+  // TBD — best 3rd-place finishers (last games still to play)
+  {id:'TBD1', flag:'🏳', name:'TBD (3rd best 1)'},
+  {id:'TBD2', flag:'🏳', name:'TBD (3rd best 2)'},
+  {id:'TBD3', flag:'🏳', name:'TBD (3rd best 3)'},
+  {id:'TBD4', flag:'🏳', name:'TBD (3rd best 4)'},
+  {id:'TBD5', flag:'🏳', name:'TBD (3rd best 5)'},
+  {id:'TBD6', flag:'🏳', name:'TBD (3rd best 6)'},
 ];
+
+// The 6 remaining 3rd-place candidates still to be decided
+// Players will pick from this dropdown for TBD slots
+const TBD_CANDIDATES = [
+  {id:'KOR', flag:'🇰🇷', name:'South Korea'},
+  {id:'SEN', flag:'🇸🇳', name:'Senegal'},
+  {id:'IRN', flag:'🇮🇷', name:'IR Iran'},
+  {id:'ALG', flag:'🇩🇿', name:'Algeria'},
+  {id:'SCO', flag:'🏴󠁧󠁢󠁳󠁣󠁴󠁿', name:'Scotland'},
+  {id:'URU', flag:'🇺🇾', name:'Uruguay'},
+  {id:'CGO', flag:'🇨🇩', name:'Congo DR'},
+  // include confirmed ones too so admin can assign any team to any TBD slot
+  {id:'GER', flag:'🇩🇪', name:'Germany'},
+  {id:'PAR', flag:'🇵🇾', name:'Paraguay'},
+  {id:'BOS', flag:'🇧🇦', name:'Bosnia & Herz.'},
+];
+
+// Which match slots are TBD (need dropdown pick by player)
+// key = matchId, value = which team slot is TBD ('A' or 'B')
+const TBD_SLOTS = {
+  'M83': 'A',   // 2K unknown
+  'M84': 'B',   // 2J unknown
+  'M82': 'B',   // 3AEHIJ unknown
+  'M80': 'B',   // 3EHIJK unknown
+  'M85': 'B',   // 3EFGIJ unknown
+  'M87': 'A',   // 1K unknown
+};
+
+// Default R32 matchups using real team IDs
+// TBD slots use TBD1-TBD6 as placeholders
+const DEFAULT_MATCHUPS = {
+  'M74': ['GER','PAR'],
+  'M77': ['FRA','SWE'],
+  'M73': ['RSA','CAN'],
+  'M75': ['NED','MAR'],
+  'M83': ['TBD1','CRO'],   // TBD1 = 2K (unknown 3rd place)
+  'M84': ['ESP','TBD2'],   // TBD2 = 2J (unknown 3rd place)
+  'M81': ['USA','BIH'],
+  'M82': ['BEL','TBD3'],   // TBD3 = 3AEHIJ (unknown 3rd place)
+  'M76': ['BRA','JPN'],
+  'M78': ['CIV','NOR'],
+  'M79': ['MEX','ECU'],
+  'M80': ['ENG','TBD4'],   // TBD4 = 3EHIJK (unknown 3rd place)
+  'M86': ['ARG','CPV'],
+  'M88': ['AUS','EGY'],
+  'M85': ['SUI','TBD5'],   // TBD5 = 3EFGIJ (unknown 3rd place)
+  'M87': ['TBD6','GHA'],   // TBD6 = 1K (unknown 3rd place)
+};
 
 // ═══════════════════════════════════════════════════
 // STATE
@@ -502,13 +539,20 @@ function getTeams(){ return gs().teams || DEFAULT_TEAMS; }
 function getMatchups(){ return gs().matchups || DEFAULT_MATCHUPS; }
 function getAdminPw(){ return gs().adminPw || 'admin2026'; }
 function isLocked(){ const s=gs(); return s.lockTime ? Date.now()>=new Date(s.lockTime).getTime() : false; }
-function teamById(id){ if(!id) return null; return getTeams().find(t=>t.id===id)||{id,flag:'🏳',name:id}; }
+function teamById(id){ if(!id) return null; return getTeams().find(t=>t.id===id)||TBD_CANDIDATES.find(t=>t.id===id)||{id,flag:'🏳',name:id}; }
+function isTBDSlot(mid){ return !!TBD_SLOTS[mid]; }
+// For a TBD slot, the team is whatever the player picked in sessionPicks for that slot key e.g. 'M83_TBD'
+function getTBDPick(mid, picks){ return picks[mid+'_TBD'] ? teamById(picks[mid+'_TBD']) : null; }
 
 // Get teams for a match given a picks/results object
 function getMatchTeams(mid, picks){
   const mu = getMatchups();
   if(mu[mid]){
-    const [a,b]=mu[mid];
+    let [a,b]=mu[mid];
+    // Replace TBD placeholders with player's TBD pick if set
+    const tbdSlot = TBD_SLOTS[mid];
+    if(tbdSlot==='A' && a.startsWith('TBD')) a = picks[mid+'_TBD'] || a;
+    if(tbdSlot==='B' && b.startsWith('TBD')) b = picks[mid+'_TBD'] || b;
     return [teamById(a), teamById(b)];
   }
   const feeds = FEEDS[mid];
@@ -603,9 +647,32 @@ function buildCard(mid, picks, isFinal, forResults){
   const pick=picks[mid];
   const locked=isLocked();
   const result=(gs().results||{})[mid];
-  const canPick=!locked&&currentPlayer&&!forResults&&tA&&tB;
+  const tbdSlot=TBD_SLOTS[mid]; // 'A', 'B', or undefined
+  const tbdPick=picks[mid+'_TBD']; // player's chosen TBD team id
+  // Can only pick winner if TBD slot is filled (or no TBD slot)
+  const tbdReady = !tbdSlot || tbdPick;
+  const canPick=!locked&&currentPlayer&&!forResults&&tA&&tB&&tbdReady;
 
-  function rowHtml(team){
+  // Dropdown row for TBD slots
+  function tbdRowHtml(slot){
+    if(locked||forResults){
+      // Show whatever was picked or a placeholder
+      const t = tbdPick ? teamById(tbdPick) : null;
+      if(!t) return `<div class="team-row nopick"><span class="tn tbd">TBD — unknown qualifier</span></div>`;
+      return `<div class="team-row nopick"><span class="tf">${t.flag}</span><span class="tn">${t.name}</span></div>`;
+    }
+    const opts = TBD_CANDIDATES.map(t=>`<option value="${t.id}"${tbdPick===t.id?' selected':''}>${t.flag} ${t.name}</option>`).join('');
+    return `<div class="team-row nopick" style="padding:5px 9px;background:rgba(201,162,39,0.06);border-left:2px solid var(--gold)">
+      <span style="font-size:10px;color:var(--gold);font-weight:600;margin-right:6px;white-space:nowrap">Pick team:</span>
+      <select class="tbd-sel" data-mid="${mid}" onchange="pickTBD('${mid}',this.value)" style="flex:1;background:var(--mid);border:1px solid var(--line);border-radius:4px;color:var(--white);font-family:var(--bf);font-size:11px;padding:3px 6px;outline:none;">
+        <option value="">— select —</option>
+        ${opts}
+      </select>
+    </div>`;
+  }
+
+  function rowHtml(team, isTBDTeam){
+    if(isTBDTeam) return tbdRowHtml(tbdSlot);
     if(!team) return `<div class="team-row nopick"><span class="tn tbd">TBD</span><span class="tc"></span></div>`;
     let cls='team-row';
     if(!canPick) cls+=' nopick';
@@ -622,11 +689,15 @@ function buildCard(mid, picks, isFinal, forResults){
     </div>`;
   }
 
+  const mu=getMatchups()[mid]||[];
+  const isA_TBD = tbdSlot==='A' && mu[0] && mu[0].startsWith('TBD');
+  const isB_TBD = tbdSlot==='B' && mu[1] && mu[1].startsWith('TBD');
+
   return `<div class="mc${isFinal?' final-card':''}" id="mc-${mid}">
     <div class="mc-id">${mid}</div>
-    ${rowHtml(tA)}
+    ${rowHtml(tA, isA_TBD)}
     <div class="mc-div"></div>
-    ${rowHtml(tB)}
+    ${rowHtml(tB, isB_TBD)}
     ${result&&forResults?`<div style="padding:5px 9px;font-size:10px;color:var(--green)">✓ ${teamById(result)?teamById(result).flag+' '+teamById(result).name:result}</div>`:''}
   </div>`;
 }
@@ -641,13 +712,25 @@ function pick(mid, teamId){
   updateCount(); renderBracket();
 }
 
+function pickTBD(mid, teamId){
+  if(isLocked()||!currentPlayer) return;
+  if(teamId) sessionPicks[mid+'_TBD']=teamId;
+  else delete sessionPicks[mid+'_TBD'];
+  // Also clear the winner pick for this match since team changed
+  delete sessionPicks[mid];
+  clearDown(mid);
+  updateCount(); renderBracket();
+}
+
 function clearDown(mid){
   const nextMid = Object.keys(FEEDS).find(k=>FEEDS[k].includes(mid));
   if(nextMid&&sessionPicks[nextMid]){ delete sessionPicks[nextMid]; clearDown(nextMid); }
 }
 
 function updateCount(){
-  document.getElementById('pc').textContent=Object.keys(sessionPicks).length;
+  // Count only match winner picks (not TBD sub-picks)
+  const winnerPicks = Object.keys(sessionPicks).filter(k=>!k.includes('_TBD')).length;
+  document.getElementById('pc').textContent=winnerPicks;
 }
 
 function savePicks(){
