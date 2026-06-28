@@ -462,7 +462,7 @@ const DEFAULT_TEAMS = [
   {id:'BEL', flag:'🇧🇪', name:'Belgium'},
   {id:'BRA', flag:'🇧🇷', name:'Brazil'},
   {id:'JPN', flag:'🇯🇵', name:'Japan'},
-  {id:'CIV', flag:'🇨🇮', name:'Côte d\'Ivoire'},
+  {id:'CIV', flag:'🇨🇮', name:'Cote d Ivoire'},
   {id:'NOR', flag:'🇳🇴', name:'Norway'},
   {id:'MEX', flag:'🇲🇽', name:'Mexico'},
   {id:'ECU', flag:'🇪🇨', name:'Ecuador'},
@@ -737,7 +737,7 @@ function savePicks(){
   if(!currentPlayer){toast('No player selected');return;}
   const s=gs(); if(!s.picks) s.picks={};
   s.picks[currentPlayer]=Object.assign({},sessionPicks); ss(s);
-  toast(`✓ ${Object.keys(sessionPicks).length} picks saved for ${currentPlayer}`);
+  const n=Object.keys(sessionPicks).filter(k=>!k.includes('_TBD')).length; toast(`✓ ${n} picks saved for ${currentPlayer}`);
 }
 
 // ═══════════════════════════════════════════════════
